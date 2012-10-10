@@ -1,0 +1,68 @@
+import unittest
+
+from akanda.ceilometer import notifications
+
+BW_NOTIFICATION = {
+    u'_context_auth_token': u'3d8b13de1b7d499587dfc69b77dc09c2',
+    u'_context_is_admin': True,
+    u'_context_project_id': u'7c150a59fe714e6f9263774af9688f0e',
+    u'_context_quota_class': None,
+    u'_context_read_deleted': u'no',
+    u'_context_remote_address': u'10.0.2.15',
+    u'_context_request_id': u'req-d68b36e0-9233-467f-9afb-d81435d64d66',
+    u'_context_roles': [u'admin'],
+    u'_context_timestamp': u'2012-05-08T20:23:41.425105',
+    u'_context_user_id': u'1e3ce043029547f1a61c1996d1a531a2',
+    u'event_type': u'akanda.bandwidth.used',
+    u'message_id': u'dae6f69c-00e0-41c0-b371-41ec3b7f4451',
+    u'payload': {u'external': {u'packets_out': 1234,
+                               u'bytes_out': 22434,
+                               u'packets_in': 88,
+                               u'bytes_in': 89420,
+                               },
+                 u'internal': {u'packets_out': 4567,
+                               u'bytes_out': 82984,
+                               u'packets_in': 77,
+                               u'bytes_in': 98982,
+                               }
+                 },
+    u'priority': u'INFO',
+    u'tenant_id': u'7c150a59fe714e6f9263774af9688f0e',
+    u'timestamp': u'2012-05-08 20:23:48.028195',
+    }
+
+
+class TestNotifications(unittest.TestCase):
+
+    def setUp(self):
+        self.bw_handler = notifications.NetworkBandwidthNotification()
+
+    @staticmethod
+    def _find_counter(counters, name):
+        for counter in counters:
+            if counter.name == name:
+                return counter
+        return None
+
+    def test_process_notification(self):
+        got = list(
+            self.bw_handler.process_notification(BW_NOTIFICATION)
+            )
+        expected_counters = {
+            'akanda:bandwidth:external:packets_out': 1234,
+            'akanda:bandwidth:external:bytes_out': 22434,
+            'akanda:bandwidth:external:packets_in': 88,
+            'akanda:bandwidth:external:bytes_in': 89420,
+            'akanda:bandwidth:internal:packets_out': 4567,
+            'akanda:bandwidth:internal:bytes_out': 82984,
+            'akanda:bandwidth:internal:packets_in': 77,
+            'akanda:bandwidth:internal:bytes_in': 98982,
+            }
+
+        assert len(got) == len(expected_counters)
+        for name in expected_counters:
+            counter = TestNotifications._find_counter(got, name)
+            assert counter is not None
+            assert counter.volume == expected_counters[name]
+            assert counter.project_id == BW_NOTIFICATION['tenant_id']
+            assert counter.timestamp == BW_NOTIFICATION['timestamp']
