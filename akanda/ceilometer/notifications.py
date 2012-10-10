@@ -50,5 +50,7 @@ class NetworkBandwidthNotification(plugin.NotificationBase):
                     volume=message['payload'][type_][subtype],
                     project_id=message['tenant_id'],
                     timestamp=message['timestamp'],
+                    user_id=None,
+                    resource_id=None,
                     resource_metadata={},
                     )
