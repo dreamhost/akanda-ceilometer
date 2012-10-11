@@ -1,6 +1,8 @@
+import mock
 import unittest
 
-from akanda.ceilometer import notifications
+from akanda.ceilometer.notifications import NetworkBandwidthNotification
+from ceilometer.openstack.common import cfg
 
 BW_NOTIFICATION = {
     u'_context_auth_token': u'3d8b13de1b7d499587dfc69b77dc09c2',
@@ -35,7 +37,7 @@ BW_NOTIFICATION = {
 class TestNotifications(unittest.TestCase):
 
     def setUp(self):
-        self.bw_handler = notifications.NetworkBandwidthNotification()
+        self.bw_handler = NetworkBandwidthNotification()
 
     @staticmethod
     def _find_counter(counters, name):
@@ -43,6 +45,33 @@ class TestNotifications(unittest.TestCase):
             if counter.name == name:
                 return counter
         return None
+
+    def test_default_exchange_topics(self):
+        topics = NetworkBandwidthNotification.get_exchange_topics(cfg.CONF)
+        assert len(topics) == 1
+
+        got_exchange = topics[0].exchange
+        got_topics = topics[0].topics
+        expected_exchange = 'akanda'
+        expected_topics = set(['notifications.info'])
+
+        assert got_exchange == expected_exchange
+        assert got_topics == expected_topics
+
+    def test_multiple_exchange_topics(self):
+        CONF = mock.Mock()
+        CONF.akanda_notification_exchange = 'the_exchange'
+        CONF.akanda_notification_topics = ['topic1', 'topic2']
+        topics = NetworkBandwidthNotification.get_exchange_topics(CONF)
+        assert len(topics) == 1
+
+        got_exchange = topics[0].exchange
+        got_topics = topics[0].topics
+        expected_exchange = 'the_exchange'
+        expected_topics = set(['topic1.info', 'topic2.info'])
+
+        assert got_exchange == expected_exchange
+        assert got_topics == expected_topics
 
     def test_process_notification(self):
         got = list(
