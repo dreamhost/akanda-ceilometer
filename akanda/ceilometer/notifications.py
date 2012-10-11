@@ -45,7 +45,7 @@ class NetworkBandwidthNotification(plugin.NotificationBase):
             for subtype in message['payload'][type_]:
                 yield counter.Counter(
                     source='?',
-                    name='akanda:bandwidth:%s:%s' % (type_, subtype),
+                    name='akanda.bandwidth:%s.%s' % (type_, subtype),
                     type=counter.TYPE_DELTA,
                     volume=message['payload'][type_][subtype],
                     project_id=message['tenant_id'],

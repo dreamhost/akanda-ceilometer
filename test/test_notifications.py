@@ -78,14 +78,14 @@ class TestNotifications(unittest.TestCase):
             self.bw_handler.process_notification(BW_NOTIFICATION)
             )
         expected_counters = {
-            'akanda:bandwidth:external:packets_out': 1234,
-            'akanda:bandwidth:external:bytes_out': 22434,
-            'akanda:bandwidth:external:packets_in': 88,
-            'akanda:bandwidth:external:bytes_in': 89420,
-            'akanda:bandwidth:internal:packets_out': 4567,
-            'akanda:bandwidth:internal:bytes_out': 82984,
-            'akanda:bandwidth:internal:packets_in': 77,
-            'akanda:bandwidth:internal:bytes_in': 98982,
+            'akanda.bandwidth:external.packets_out': 1234,
+            'akanda.bandwidth:external.bytes_out': 22434,
+            'akanda.bandwidth:external.packets_in': 88,
+            'akanda.bandwidth:external.bytes_in': 89420,
+            'akanda.bandwidth:internal.packets_out': 4567,
+            'akanda.bandwidth:internal.bytes_out': 82984,
+            'akanda.bandwidth:internal.packets_in': 77,
+            'akanda.bandwidth:internal.bytes_in': 98982,
             }
 
         assert len(got) == len(expected_counters)
