@@ -39,10 +39,9 @@ class NetworkBandwidthNotification(plugin.NotificationBase):
     def _notifications_from_payload(self, payload):
         """Given a notification message payload, returns (name, value) pairs
         for all the counters that should be generated."""
-        for name in payload:
-            value = payload[name]
-            # FIXME (sberler): is there a better way than using type()?
-            if type(value) is dict:
+        for name, value in payload.items():
+            # FIXME (sberler): is there a better way than using isisntance()?
+            if isinstance(value, dict):
                 for (subname, val) in self._notifications_from_payload(value):
                     yield (name + '.' + subname, val)
             else:
