@@ -3,7 +3,7 @@ import textwrap
 from setuptools import setup, find_packages
 
 setup(
-    name='Akanda Ceilometer Plugin',
+    name='akanda-ceilometer',
     version='0.1.0',
     description='Ceilometer plugin for processing Akanda notifications',
     author='DreamHost',
