@@ -2,4 +2,4 @@ unittest2
 nose
 coverage
 mock>=0.8.0
-https://github.com/stackforge/ceilometer/zipball/master#egg=ceilometer
+http://tarballs.openstack.org/ceilometer/ceilometer-stable-folsom.tar.gz#egg=ceilometer

@@ -77,6 +77,7 @@ EXPECTED_COUNTERS = {
     'akanda.bandwidth:internal.in.bytes': 98982,
     }
 
+
 class TestNotifications(unittest.TestCase):
 
     def setUp(self):

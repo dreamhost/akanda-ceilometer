@@ -1,5 +1,3 @@
-import textwrap
-
 from setuptools import setup, find_packages
 
 setup(
@@ -13,10 +11,12 @@ setup(
     install_requires=['ceilometer'],
     namespace_packages=['akanda'],
     packages=find_packages(),
-    entry_points=textwrap.dedent("""
-    [ceilometer.collector]
-    akanda_bandwidth = akanda.ceilometer.notifications:NetworkBandwidthNotification
-    """),
+    entry_points={
+        'ceilometer.collector': [
+            'akanda_bandwidth = akanda.ceilometer.notifications'
+            ':NetworkBandwidthNotification',
+        ],
+    },
     include_package_data=True,
     zip_safe=False,
     )
