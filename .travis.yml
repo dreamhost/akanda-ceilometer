@@ -9,4 +9,4 @@ install:
 before_script:
   - pep8 --repeat --show-source --ignore=E123,E125 --statistics --exclude=dist,doc,*egg .
   - pyflakes akanda
-script: nosetests
+script: nosetests -d
