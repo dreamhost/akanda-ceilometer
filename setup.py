@@ -10,7 +10,7 @@ setup(
     license='BSD',
     install_requires=['ceilometer'],
     namespace_packages=['akanda'],
-    packages=find_packages(),
+    packages=find_packages(exclude=['test', 'smoke']),
     entry_points={
         'ceilometer.collector': [
             'akanda_bandwidth = akanda.ceilometer.notifications'
